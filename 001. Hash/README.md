@@ -1,7 +1,7 @@
 # Hash
 </br>
 
-![ex_screenshot](./img_md/hash_001.png)
+![ex_screenshot](./img_md/hash_001.jpg)
 
 </br></br></br>
 

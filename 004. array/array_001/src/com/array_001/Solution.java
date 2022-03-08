@@ -44,3 +44,8 @@ public class Solution {
         return answer;
     }
 }
+
+// https://taeil00.tistory.com/193
+// Arrays.copyOfRange를 사용하면 배열의 복사가 가능하다
+// 이를 사용하면 훨씬 짧고 가독성 있게 코드 작성이 가능함
+// Arrays.copyOfRange(원본 배열, 복사할 시작인덱스, 복사할 끝인덱스) 인덱스는 0부터 시작하는것 기준

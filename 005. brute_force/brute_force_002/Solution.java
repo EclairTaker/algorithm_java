@@ -1,5 +1,3 @@
-package com.brute_force_002;
-
 import java.util.*;
 
 class Solution {
@@ -54,13 +52,12 @@ class Solution {
     }
 
     public void findPrime() {
-
         // 숫자로 변환
         String str = "";
         for(int i=0; i<result.length; i++)
             str += result[i];
         int num = Integer.parseInt(str);
-
+        
         // 예외 처리
         if(num == 1 || num == 0)
             return;

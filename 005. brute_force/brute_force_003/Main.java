@@ -1,5 +1,3 @@
-package com.brute_force_003;
-
 public class Main {
     public static void main(String[] args) {
         Solution sol = new Solution();

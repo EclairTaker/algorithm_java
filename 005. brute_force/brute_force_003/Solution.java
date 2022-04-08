@@ -3,8 +3,9 @@ import java.util.*;
 public class Solution {
     public int[] solution(int brown, int yellow) {
         int[] answer = new int[2];
-        int area = brown + yellow; //전체 갯수
-        
+        int area = brown + yellow;
+
+        //전체 갯수
         //행과 열의 갯수는 3이상이여야 합니다.
         for (int i=3; i <= area; i++) {
             int col = i;             // 열

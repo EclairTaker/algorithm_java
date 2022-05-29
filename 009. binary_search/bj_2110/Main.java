@@ -16,8 +16,7 @@ public class Main {
         // 반복문으로 집 좌표 배열에 입력
         for (int i=0; i < iHome_num; i++)   {
             iHome_cord[i] = sc.nextInt();
-        }
-        
+        }        
         // 이진탐색을 행하기 전에 일단 sort로 정렬부터 처리해야함
         Arrays.sort(iHome_cord);
 

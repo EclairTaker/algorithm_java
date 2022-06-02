@@ -5,8 +5,6 @@ public class Main {
         int answer = 0;
         // 그래프 구현을 위해 ArrayList를 활용
         ArrayList<ArrayList<Integer>> alGraph = new ArrayList<>();
-        // 가장 먼 거리의 노드를 확인하기 위해 거리를 저장해야함
-        int[] iDistance = new int[n + 1];
 
         for (int i = 0; i < n+1; i++)   {
             alGraph.add(new ArrayList<>());
@@ -21,34 +19,40 @@ public class Main {
             Collections.sort(alGraph.get(i));
         }
 
-        System.out.println(alGraph);
+        //System.out.println(alGraph);
         // 방문기록을 True, False로 기록
         boolean[] bVisited = new boolean[n + 1];
         // 1번 노드에서 가장 먼 거리를 체크해야하기 때문에 무조건 통과
         bVisited[1] = true;
+        // BFS를 선언 후, 그 첫 노드로 1을 통과할 것이기 때문에
+        // 노드 1에 대한 정보들 초기화
         Queue<Integer> BFS = new LinkedList<>();
         BFS.offer(1);
         bVisited[1]=true;
-        int iGraph_size, iNode;
+
+        int iGraph_size, iCurNode;
 
         // 1을 통과한 후 2~n까지의 경로 도출
         // BFS의 내용물이 바닥나기 전까지 반복 수행
         while (!BFS.isEmpty()) {
             iGraph_size = BFS.size();
-            // Grpah 상에서 현재노드를 idx값으로 가지는 객체를 가져옴
-            // 해당 객체 [][]를 return하여 alNode에 저장
             for (int i = 0; i < iGraph_size; i++)   {
-                iNode = BFS.poll();
-                for (int j = 0; j < alGraph.get(iNode).size(); j++)  {
-                    if(bVisited[alGraph.get(iNode).get(j)] == false)    {
-                        bVisited[alGraph.get(iNode).get(j)] = true;
-                        BFS.offer(alGraph.get(iNode).get(j));
+                // 현재 조회하는 노드를 BFS에서 poll로 정보 확인
+                iCurNode = BFS.poll();
+                // iCurNode를 idx값으로 가지는 객체의 size까지 반복
+                // 객체 size = 해당 경로가 연결된 루트들
+                for (int j = 0; j < alGraph.get(iCurNode).size(); j++)  {
+                    // 루트에 따라 이동 중 방문한 노드의 방문 기록이 false라면 true로 변경
+                    // 이후, 해당 노드를 BFS에 기록
+                    if(bVisited[alGraph.get(iCurNode).get(j)] == false)    {
+                        bVisited[alGraph.get(iCurNode).get(j)] = true;
+                        BFS.offer(alGraph.get(iCurNode).get(j));
                     }
                 }
             }
-            answer = iGraph_size;
+            // 왜?
+            answer = iGraph_size + 1;
         }
-        System.out.println(answer);
         return answer;
     }
 }

@@ -2,56 +2,60 @@ import java.util.*;
 
 public class Main {
     // 다익스트라 알고리즘 적용하여 새로 풀이 수행
+    // 최대 경우의 수 노드 20,000 * 간선 50,000 ...?
+    static final int INF = 1000000;
     public int solution(int n, int[][] edge) {
         int answer = 0;
-        // 입력받는 노드 갯수보다 +1만큼 그래프 최대 길이로 설정해야함
-        List<Integer> lGraph[] = new ArrayList[n+1];
-        // 방문 여부를 True, False로 구분
-        boolean[] bVisited = new boolean[n+1];
-        // 그래프 경로에 Cost, Weight가 존재하지 않기 때문에 boolean 2차원 배열로 그래프 설정 가능
-        boolean[][] bPath = new boolean[n+1][n+1];
+        // class Node 사용해서 ArrayList 선언
+        // Class Node의 구조 (index, cost)
+        ArrayList<Node>[] graph = new ArrayList[n];
 
-        for (int i = 0; i <= n; i++)    {
-            lGraph[i] = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList<>();
         }
 
-        for (int[] iEdge : edge)    {
-            // 경로는 양방향이기 때문에 방문한 지점에서 그곳과 연결된 노드
-            // 양쪽을 처리를 해주어야 함.
-            bPath[iEdge[0]][iEdge[1]] = true;
-            bPath[iEdge[1]][iEdge[0]] = true;
+        for (int[] e : edge)    {
+            // Graph를 작성
+            // Node간 연결선에 weight, distance는 존재하지 않기 때문에 전부 1로 통일 (거리는 동일하기 때문)
+            graph[e[0] - 1].add(new Node(e[1] - 1, 1));
+            graph[e[1] - 1].add(new Node(e[0] - 1, 1));
         }
 
-        // 최대거리를 저장하기 위한 Queue 생성
-        Queue<Integer> qBuffer = new ArrayDeque<>();
-        // 시작지점은 일단 저장 후 Start
-        qBuffer.add(1);
-        // 시작지점인 1은 True로 Start
-        bVisited[1] = true;
+        // 최대거리 확인을 위한 distance
+        int[] distance = new int[n];
+        Arrays.fill(distance, INF);
+        // 시작지점이기 때문에 0으로 Start
+        distance[0] = 0;
+        PriorityQueue<Node> queue = new PriorityQueue();
+        queue.add(new Node(0, 0));
 
-        // iQsize가 최고임을 확인해서 현재 최대거리인 node를 정리
-        int iQsize;
+        while (!queue.isEmpty())    {
+            // 현재 방문 노드 정보를 확인
+            Node curNode = queue.poll();
 
-        while (!qBuffer.isEmpty())  {
-            iQsize = qBuffer.size();
-            for (int i = 0; i < iQsize; i++)    {
-                // 현재 노드 정보를 poll로 받아온다
-                int now = qBuffer.poll();
-                // 노드 정보를 토대로 bVisited에서 해당 노드 번호 전까지 방문 여부를 check = 방문하지 않았다면
-                // 노드 정보를 토대로 bPath에서 해당 노드와 연결된 경로를 확인한다.
-                for (int j = 1; j <= n; j++)    {
-                    if (!bVisited[j] && bPath[now][j])  {
-                        // 해당 노드를 방문한 것으로 하기 위해 bVisited를 True
-                        // 해당 노드로 이동한 것이기 때문에 현재 위치로 활용하기 위해 qBuffer에 추가
-                        bVisited[j] = true;
-                        qBuffer.add(j);
-                    }
-                }
+            // 해당 노드의 번호를 통해 조회하여 해당 
+            for (int i = 0; i < graph[curNode.index].size(); i++)   {
+                Node next = graph[curNode.index].get(i);
             }
-            // 최종적으로 다익스트라 알고리즘을 토대로
-            answer = iQsize;
-        }        
+        }
+
         return answer;
+    }
+
+    // 사용하기 위한 class Node 선언
+    class Node implements Comparable<Node>  {
+        int index;
+        int cost;
+
+        public Node(int index, int cost)    {
+            this.index = index;
+            this.cost = cost;
+        }
+
+        @Override
+        public int compareTo(Node o)    {
+            return Integer.compare(this.cost, o.cost);
+        }
     }
 }
 

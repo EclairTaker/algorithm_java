@@ -57,5 +57,7 @@ public class Main {
     }
 }
 
+// I'm fkin tire
+
 // 참조 : https://born2bedeveloper.tistory.com/43
 // 참조 : https://arinnh.tistory.com/40

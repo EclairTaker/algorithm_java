@@ -1,58 +1,56 @@
 import java.util.*;
 
 public class Main {
+    // 다익스트라 알고리즘 적용하여 새로 풀이 수행
     public int solution(int n, int[][] edge) {
         int answer = 0;
-        // 그래프 구현을 위해 ArrayList를 활용
-        ArrayList<ArrayList<Integer>> alGraph = new ArrayList<>();
+        // 입력받는 노드 갯수보다 +1만큼 그래프 최대 길이로 설정해야함
+        List<Integer> lGraph[] = new ArrayList[n+1];
+        // 방문 여부를 True, False로 구분
+        boolean[] bVisited = new boolean[n+1];
+        // 그래프 경로에 Cost, Weight가 존재하지 않기 때문에 boolean 2차원 배열로 그래프 설정 가능
+        boolean[][] bPath = new boolean[n+1][n+1];
 
-        for (int i = 0; i < n+1; i++)   {
-            alGraph.add(new ArrayList<>());
-        }
-        for (int i = 0; i < edge.length; i++)   {
-            // graph가 양방향
-            // 특정 경로 발견 시 해당 경로를 양방향으로 graph에 업데이트
-            alGraph.get(edge[i][0]).add(edge[i][1]);
-            alGraph.get(edge[i][1]).add(edge[i][1]);
-        }
-        for (int i = 1; i <= n; i++)    {
-            Collections.sort(alGraph.get(i));
+        for (int i = 0; i <= n; i++)    {
+            lGraph[i] = new ArrayList<>();
         }
 
-        //System.out.println(alGraph);
-        // 방문기록을 True, False로 기록
-        boolean[] bVisited = new boolean[n + 1];
-        // 1번 노드에서 가장 먼 거리를 체크해야하기 때문에 무조건 통과
+        for (int[] iEdge : edge)    {
+            // 경로는 양방향이기 때문에 방문한 지점에서 그곳과 연결된 노드
+            // 양쪽을 처리를 해주어야 함.
+            bPath[iEdge[0]][iEdge[1]] = true;
+            bPath[iEdge[1]][iEdge[0]] = true;
+        }
+
+        // 최대거리를 저장하기 위한 Queue 생성
+        Queue<Integer> qBuffer = new ArrayDeque<>();
+        // 시작지점은 일단 저장 후 Start
+        qBuffer.add(1);
+        // 시작지점인 1은 True로 Start
         bVisited[1] = true;
-        // BFS를 선언 후, 그 첫 노드로 1을 통과할 것이기 때문에
-        // 노드 1에 대한 정보들 초기화
-        Queue<Integer> BFS = new LinkedList<>();
-        BFS.offer(1);
-        bVisited[1]=true;
 
-        int iGraph_size, iCurNode;
+        // iQsize가 최고임을 확인해서 현재 최대거리인 node를 정리
+        int iQsize;
 
-        // 1을 통과한 후 2~n까지의 경로 도출
-        // BFS의 내용물이 바닥나기 전까지 반복 수행
-        while (!BFS.isEmpty()) {
-            iGraph_size = BFS.size();
-            for (int i = 0; i < iGraph_size; i++)   {
-                // 현재 조회하는 노드를 BFS에서 poll로 정보 확인
-                iCurNode = BFS.poll();
-                // iCurNode를 idx값으로 가지는 객체의 size까지 반복
-                // 객체 size = 해당 경로가 연결된 루트들
-                for (int j = 0; j < alGraph.get(iCurNode).size(); j++)  {
-                    // 루트에 따라 이동 중 방문한 노드의 방문 기록이 false라면 true로 변경
-                    // 이후, 해당 노드를 BFS에 기록
-                    if(bVisited[alGraph.get(iCurNode).get(j)] == false)    {
-                        bVisited[alGraph.get(iCurNode).get(j)] = true;
-                        BFS.offer(alGraph.get(iCurNode).get(j));
+        while (!qBuffer.isEmpty())  {
+            iQsize = qBuffer.size();
+            for (int i = 0; i < iQsize; i++)    {
+                // 현재 노드 정보를 poll로 받아온다
+                int now = qBuffer.poll();
+                // 노드 정보를 토대로 bVisited에서 해당 노드 번호 전까지 방문 여부를 check = 방문하지 않았다면
+                // 노드 정보를 토대로 bPath에서 해당 노드와 연결된 경로를 확인한다.
+                for (int j = 1; j <= n; j++)    {
+                    if (!bVisited[j] && bPath[now][j])  {
+                        // 해당 노드를 방문한 것으로 하기 위해 bVisited를 True
+                        // 해당 노드로 이동한 것이기 때문에 현재 위치로 활용하기 위해 qBuffer에 추가
+                        bVisited[j] = true;
+                        qBuffer.add(j);
                     }
                 }
             }
-            // 왜?
-            answer = iGraph_size + 1;
-        }
+            // 최종적으로 다익스트라 알고리즘을 토대로
+            answer = iQsize;
+        }        
         return answer;
     }
 }
